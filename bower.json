@@ -1,0 +1,29 @@
+{
+  "name": "emeals",
+  "version": "1",
+  "homepage": "https://github.com/Norberto01/emeals",
+  "description": "Meals",
+  "dependencies": {
+    "angular": "^1.3.0"
+  },
+  "moduleType": [
+    "globals",
+    "node",
+    "yui"
+  ],
+  "keywords": [
+    "Meals"
+  ],
+  "authors": [
+    "Norberto"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}

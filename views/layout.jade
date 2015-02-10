@@ -1,7 +1,23 @@
 doctype html
-html
+html(ng-app='startApp')
   head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
+    title = #{title}
   body
-    block content
+    div#content-wrap(ng-view)
+      block content
+    // Angular And JQuery
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+    script(src="/static/angular/angular.js")
+    script(src="/static/bootstrap/dist/js/bootstrap.js")
+    script(src='/static/angular-cookies/angular-cookies.js')
+    script(src="/static/angular-resource/angular-resource.js")
+    script(src="/static/angular-route/angular-route.js")
+    script(src="/static/angular-sanitize/angular-sanitize.js")
+    script(src="/static/angular-touch/angular-touch.js")
+    script(src="http://cdnjs.cloudflare.com/ajax/libs/restangular/1.3.1/restangular.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.7.0/underscore-min.js")
+    // Custom
+    script(src="custom/app/app.js")
+    script(src="modules/entities/entitiesCtrl.js")
+    script(src="custom/app/shared/Services.js")
+

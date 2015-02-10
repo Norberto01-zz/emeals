@@ -1,0 +1,11 @@
+//
+   Created by root on 2/5/15.
+
+h2 Welcome to
+div(ng-controller="EntityIndexCtrl")#list-items
+   div
+      a(href='/#/entity/new')#create-item Create new item
+   ul
+      li(ng-repeat="entityWrapp in entitiesWrapp")
+         h3
+            a(href='/#/entity/{{entityWrapp._id}}/view') {{entityWrapp.title}}
