@@ -1,26 +1,26 @@
 //
    Created by root on 2/5/15.
 div#form-wrapp
-      div(class="form-item")
-         label(for="em_picture", class="col-sm-2 control-label") Picture
-         input(type="file", ng-model="entityWrapp.images", class="form-control", name="picture", placeholder="Picture")#em_picture
+      //div(class="form-item")
+      //   label(for="em_picture", class="col-sm-2 control-label") Picture
+      //   input(type="file", ng-model="entityWrapp.images", class="form-control", name="picture", placeholder="Picture")#em_picture
 
-      div(class="form-item")
-         label(for="em_name", class="col-sm-2 control-label") Title
-         input(type="text", ng-model="entityWrapp.title", class="form-control", placeholder="Title")#em_title
+    div(class="form-item")
+        label(for="em_name", class="col-sm-2 control-label") Title
+        input(type="text", ng-model="entityWrapp.name", class="form-control", placeholder="Title")#em_title
 
-      div(class="form-item")
-         label(for="em_details", class="col-sm-2 control-label") Details
-         input(type="text", ng-model="entityWrapp.description", class="form-control", placeholder="Details")#em_details
+    div(class="form-item")
+        label(for="em_details", class="col-sm-2 control-label") Details
+        input(type="text", ng-model="entityWrapp.details", class="form-control", placeholder="Details")#em_details
 
-      div(class="form-item")
-         label(for="em_email", class="col-sm-2 control-label") Email
-         input(type="text", ng-model="entityWrapp.email", class="form-control", placeholder="Email")#em_email
+    //div(class="form-item")
+    //   label(for="em_email", class="col-sm-2 control-label") Email
+    //   input(type="text", ng-model="entityWrapp.email", class="form-control", placeholder="Email")#em_email
 
-      div(class="form-item")
-         label(for="em_categories", class="col-sm-2 control-label") Categories
-         input(type="text", ng-model="entityWrapp.categories", class="form-control", placeholder="Categories")#em_categories
+    div(class="form-item")
+        label(for="em_status", class="col-sm-2 control-label") Status
+        input(type="checkbox", checked=true, ng-model="entityWrapp.status", class="form-control", placeholder="Status")#em_status
 
-      div(class="form-item")
-         label(for="em_status", class="col-sm-2 control-label") Status
-         input(type="checkbox", checked=true, ng-model="entityWrapp.status", class="form-control", placeholder="Status")#em_status
+    div(class="form-item")
+        label(for="em_categories", class="col-sm-2 control-label") Categories
+        input(type="text", ng-model="entityWrapp.categories", class="form-control", placeholder="Categories")#em_categories

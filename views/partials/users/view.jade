@@ -1,0 +1,15 @@
+//
+   Created by root on 2/5/15.
+
+div(ng-controller="EntityViewCtrl" class="main-items")#view-items
+   h3
+      p {{entityWrapp.title}}
+   div(class="items")
+      p {{entityWrapp.description}}
+   div(class="items")
+      p {{entityWrapp.email}}
+   div(class="items")
+      p {{entityWrapp.status}}
+   div
+      a(href="#/entity/{{entityWrapp._id}}/edit")
+         span Edit

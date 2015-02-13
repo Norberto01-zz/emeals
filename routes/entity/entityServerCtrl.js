@@ -1,26 +1,44 @@
 var express = require('express');
 var router = express.Router();
+var models = require('../../models');
 
+objectId = require('mongodb').ObjectID;
 
 //var entityServerModel = require('./entityServerModel');
-var EntityModel = mongoose.model('Entity', Entity);
+//var db = require('././././models');
+//var EntityModel = db.model('Entity', Entity);
+//router.get('/', function(req, res){
+//    res.send("Hola mundo!");
+//});
 
-router.route('/nodes').get(function(req, res){ // LIST NODES
-    return EntityModel.find(function(err, entities){
-        if(!err){
-            return res.send(entities);
+var data = models.dbconnection(),
+    EntityModel = data.EntitiesModel;
+    EntityModel.on('index', function(err) {
+        if (err) {
+            console.error('Entity index error: %s', err);
         } else {
-            return console.log(err);
+            console.info('Entity indexing complete');
         }
     });
+
+var dataHandler = function (err, param, res){
+    if(!err){
+        return res.send(param);
+    }else{
+        return console.log(err);
+    }
+};
+router.get('/cat', function(req, res){
+    return data.CategoriesModel.find()(function(err, entity){dataHandler(err, entity, res)});
+});
+
+router.route('/nodes').get(function(req, res){ // LIST NODES
+    return EntityModel.find(function(err, entity){dataHandler(err, entity, res)});
 }).post(function(req, res, next){ // CREATE NODES
     var entity;
-    entity = new EntityModel({
+    entity = EntityModel.create({
         title: req.query.title,
-        description: req.query.description,
-        email: req.query.email,
-        images: req.query.images,
-        categories: req.query.categories,
+        details: req.query.details,
         status: req.query.status,
         removed: false
     });
@@ -34,21 +52,11 @@ router.route('/nodes').get(function(req, res){ // LIST NODES
     return res.send(entity);
 });
 router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
-    return EntityModel.findById(req.params.id, function (err, entity){
-        if(!err){
-            return res.send(entity);
-        } else {
-            console.log(err);
-        }
-        return res.send(entity);
-    });
+    return EntityModel.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
 }).put(function(req, res, next){ // UPDATE SPECIFIC NODES
     return EntityModel.findById(req.params.id, function(err, entity){
         entity.title = req.query.title;
-        entity.description = req.query.description;
-        entity.email = req.query.email;
-        entity.images = req.query.images;
-        entity.categories = req.query.categories;
+        entity.details = req.query.details;
         entity.status = req.query.status;
 
         return entity.save(function(err){

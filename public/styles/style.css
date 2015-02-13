@@ -6,3 +6,12 @@ body {
 a {
   color: #00B7FF;
 }
+#entity-menu{
+  display: inline-block;
+  float: left;
+}
+.well-sm{
+  float: left;
+  display: block;
+  clear: both;
+}

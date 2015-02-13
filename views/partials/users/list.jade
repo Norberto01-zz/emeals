@@ -1,0 +1,18 @@
+//
+   Created by root on 2/5/15.
+
+h2 Welcome to
+div(ng-controller="EntityIndexCtrl")#list-items
+   div
+      ul(class="nav navbar-nav")#entity-menu
+         li
+            a(href='/#/user/new')#create-item Create new item
+         li
+            a(href='/#/entity')#create-item Entities list
+   div(class="well-sm")
+      ul(class="list-group")
+         li(ng-repeat="entityWrapp in entitiesWrapp" )
+            h3
+               a(href='/#/user/{{entityWrapp._id}}/view') {{entityWrapp.username}}
+            p {{entityWrapp.email}}
+            p {{entityWrapp.phone}}

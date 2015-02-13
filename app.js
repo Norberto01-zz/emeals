@@ -8,15 +8,19 @@ var express = require('express'),
     //methodOverride = require('method-override'),
     //errorHandler = require('errorhandler'),
     //favicon = require('serve-favicon'),
-
+    requireDir = require('require-dir'),
     partials = require('./routes/partials'),
-    routes = require('./routes/index'),
-    entityServerCtrl = require('./routes/entity/entityServerCtrl');
+    models = require('./models'),
+    entityServerCtrl = require('./routes/entity/entityServerCtrl'),
+    userServerCtrl = require('./routes/users/userServerCtrl');
+
 
 var app = express();
 
+//var routes = requireDir('./routes', {recurse: true});
+//console.log(routes);
+//for(var i in routes) app.use('/', routes[i]);
 //var favicon = require('serve-favicon'),
-
 // view engine setup
 app.set('controllers', path.join(__dirname, 'controllers')) ;
 app.set('view engine', 'jade');
@@ -46,6 +50,7 @@ app.use('/modules', express.static(__dirname + '/public/app/components'));
 app.use('/partials/entities/:name', partials.entityRouter);
 app.use('/partials/users/:name', partials.usersRouter);
 app.use('/entity', entityServerCtrl);
+app.use('/users', userServerCtrl);
 
 // server view partials
 //app.use('/partials', partials);
@@ -85,8 +90,5 @@ app.use(function(err, req, res, next) {
 app.get('/', function(req, res, next) {
     res.render('views/index');
 });
-
-
-
 
 module.exports = app;
