@@ -1,7 +1,7 @@
 //
    Created by root on 2/5/15.
 
-div(ng-controller="EntityViewCtrl" class="main-items")#view-items
+div(ng-controller="UserViewCtrl" class="main-items")#view-items
    h3
       p {{entityWrapp.title}}
    div(class="items")
@@ -11,5 +11,5 @@ div(ng-controller="EntityViewCtrl" class="main-items")#view-items
    div(class="items")
       p {{entityWrapp.status}}
    div
-      a(href="#/entity/{{entityWrapp._id}}/edit")
+      a(href="#/user/{{entityWrapp._id}}/edit")
          span Edit

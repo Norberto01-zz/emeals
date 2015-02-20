@@ -4,22 +4,10 @@ var models = require('../../models');
 
 objectId = require('mongodb').ObjectID;
 
-//var entityServerModel = require('./entityServerModel');
-//var db = require('././././models');
-//var EntityModel = db.model('Entity', Entity);
-//router.get('/', function(req, res){
-//    res.send("Hola mundo!");
-//});
 
-var data = models.dbconnection(),
-    EntityModel = data.EntitiesModel;
-    EntityModel.on('index', function(err) {
-        if (err) {
-            console.error('Entity index error: %s', err);
-        } else {
-            console.info('Entity indexing complete');
-        }
-    });
+//var data = models.dbconnection(),
+//    EntityModel = data.EntitiesModel;
+
 
 var dataHandler = function (err, param, res){
     if(!err){
@@ -28,23 +16,20 @@ var dataHandler = function (err, param, res){
         return console.log(err);
     }
 };
-router.get('/cat', function(req, res){
-    return data.CategoriesModel.find()(function(err, entity){dataHandler(err, entity, res)});
-});
 
 router.route('/nodes').get(function(req, res){ // LIST NODES
-    return EntityModel.find(function(err, entity){dataHandler(err, entity, res)});
+    return models.EntitySchema.find(function(err, entityschemas){dataHandler(err, entityschemas, res)});
 }).post(function(req, res, next){ // CREATE NODES
     var entity;
-    entity = EntityModel.create({
-        title: req.query.title,
+    entity = models.EntitySchema.create({
+        name: req.query.name,
         details: req.query.details,
-        status: req.query.status,
+        status: true,
         removed: false
     });
     entity.save(function(err){
         if(!err){
-            return console.log("Created");
+            return console.log("Created NODE!!!");
         } else {
             return console.log(err);
         }
@@ -52,13 +37,12 @@ router.route('/nodes').get(function(req, res){ // LIST NODES
     return res.send(entity);
 });
 router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
-    return EntityModel.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
+    return models.EntitySchema.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
 }).put(function(req, res, next){ // UPDATE SPECIFIC NODES
-    return EntityModel.findById(req.params.id, function(err, entity){
-        entity.title = req.query.title;
+    return models.EntitySchema.findById(req.params.id, function(err, entity){
+        entity.name = req.query.name;
         entity.details = req.query.details;
         entity.status = req.query.status;
-
         return entity.save(function(err){
             if(!err){
                 console.log("Update");
@@ -71,7 +55,7 @@ router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
 });
 /* ------------------------------------Bulk Destroy Action----------------------------------------------*/
 router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SINGLE ENTITY UPDATING THE STATUS OF REMOVED FIELD
-    return EntityModel.findById(req.params.id, function(err, entity){
+    return req.db.EntitySchema.findById(req.params.id, function(err, entity){
         entity.removed = true;
         return entity.save(function(err){
             if(!err){
@@ -83,7 +67,7 @@ router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SIN
         });
     });
 }).delete(function(req, res, next){ // DELETE A SINGLE ENTITY REAL FROM DB -- DANGEROUS --
-    return EntityModel.findById(req.params.id, function(err, entity){
+    return req.db.EntitySchema.findById(req.params.id, function(err, entity){
         return entity.remove(function(err){
             if(!err){
                 console.log("Deleted from DB");
@@ -95,7 +79,7 @@ router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SIN
     });
 });
 router.delete('/nodes/destroy/all', function (req, res, next){ // Bulk destroy all FROM DB -- VERY DANGER --
-    EntityModel.remove(function (err) {
+    req.db.EntitySchema.remove(function (err) {
         if (!err) {
             console.log("All has been deleted :(");
             return res.send('');

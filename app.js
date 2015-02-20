@@ -47,10 +47,12 @@ app.use('/modules', express.static(__dirname + '/public/app/components'));
 
 //app.use('/', routes);
 //app.use('/hellow', routes);
+
 app.use('/partials/entities/:name', partials.entityRouter);
 app.use('/partials/users/:name', partials.usersRouter);
+app.use('/partials/:name', partials.defaultRouter);
 app.use('/entity', entityServerCtrl);
-app.use('/users', userServerCtrl);
+app.use('/user', userServerCtrl);
 
 // server view partials
 //app.use('/partials', partials);

@@ -9,24 +9,39 @@ var module = angular.module('startApp.entityCrl', ['restangular']);
 
 
 // @@@@@@@@@@@ ------------- Controller ------------- @@@@@@@@@@@
-module.controller('EntityIndexCtrl', ['$scope', '$routeParams', 'appData', function ($scope, $routeParams, appData) {// LIST
+module.controller('EntityIndexCtrl', ['$scope', '$routeParams', 'appData', '$location', function ($scope, $routeParams, appData, $location) {// LIST
+
     $scope.entitiesWrapp = appData.all('entity/nodes').getList().$object;
+
 }]).controller('EntityViewCtrl', ['$scope', '$routeParams', 'appData', function($scope, $routeParams, appData){// VIEW
+
     $scope.entityWrapp = appData.one('entity/nodes', $routeParams.id).get().$object;
-}]).controller('EntityCreateCtrl', [ '$scope', 'appData', '$routeParams', '$location', '$http', function($scope, appData, $routeParams, $location, $http){// CREATE
+
+}]).controller('EntityCreateCtrl', [ '$scope', 'appData', '$routeParams', '$location', function($scope, appData, $routeParams, $location){// CREATE
+
     $scope.setNode = function() {
         var entity = appData.all('entity/nodes');
-        entity.post('nodeEntity', $scope.entityWrapp).then(function(){
+        entity.getList().then(function(entities){
+            $scope.entitiesWrapp = entities;
+        });
+        ////console.log($scope.entityWrapp);
+        entity.post('entitiesWrapp', $scope.entityWrapp).then(function(res) {
+
+            $location.path('/entity');
+        }, function(err) {
             $location.path('/entity');
         });
     };
+
 }]).controller('EntityEditCtrl', ['$scope', 'appData', '$routeParams', '$location', function($scope, appData, $routeParams, $location){// EDIT
+
     $scope.entityWrapp = appData.one('entity/nodes', $routeParams.id).get().$object;
     $scope.setData = function(data) {
         appData.one('entity/nodes',$routeParams.id).put(data).then(function() {
             $location.path('/entity');
         });
     };
+
 }]);
 
 

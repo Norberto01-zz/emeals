@@ -28,5 +28,8 @@ module.config(['$routeProvider', function($routeProvider) {// ---------------Ent
         }).when('/user/new', {
             templateUrl: 'partials/users/add.jade',
             controller: 'UserCreateCtrl'
+        }).when('/', {
+            templateUrl: 'partials/users/list.jade',
+            controller: 'UserIndexCtrl'
         });
 }]);

@@ -4,8 +4,6 @@ var models = require('../../models');
 
 objectId = require('mongodb').ObjectID;
 
-var data = models.dbconnection(),
-    UserModel = data.UsersModel;
 
 var dataHandler = function (err, param, res){
     if(!err){
@@ -16,32 +14,41 @@ var dataHandler = function (err, param, res){
 };
 
 router.route('/nodes').get(function(req, res){ // LIST NODES
-    return UserModel.find(function(err, entity){dataHandler(err, entity, res)});
+    return models.UserSchema.find(function(err, entity){dataHandler(err, entity, res)});
 }).post(function(req, res, next){ // CREATE NODES
-    var entity;
-    entity = UserModel.insert({
-        name: req.query.name,
-        last_name: req.query.last_name,
-        username: req.query.username,
-        password: req.query.password,
-        email: req.query.email,
-        phone: req.query.phone,
-        parent: 'Entity'
+    //console.log(req.query);
+
+    var params = {name:req.param('name'), details:req.param('details'), status:req.param('status')};
+
+    var entity = models.UserSchema.create({
+        parent:{name: req.param('name'), details: req.query.details, status: req.query.status},
+        last_name: req.param('last_name'),
+        username: req.param('username'),
+        password: req.param('password'),
+        email: req.param('email'),
+        phone: req.param('phone')
     });
+    entity.addParent(params);
+    //var examp =
+    //console.log(examp);
     entity.save(function(err){
         if(!err){
-            return console.log("Created");
+            return console.log("Child Created");
         } else {
+            console.log("Child Server ERROR");
             return console.log(err);
         }
     });
+
     return res.send(entity);
 });
 router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
-    return UserModel.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
+    return models.UserSchema.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
 }).put(function(req, res, next){ // UPDATE SPECIFIC NODES
-    return UserModel.findById(req.params.id, function(err, entity){
-        entity.name = req.query.name;
+    return models.UserSchema.findById(req.params.id, function(err, entity){
+        console.log(entity);
+        console.log(req.query);
+        entity.last_name = req.query.last_name;
         entity.username = req.query.username;
         entity.password = req.query.password;
         entity.email = req.query.email;
@@ -59,7 +66,7 @@ router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
 });
 /* ------------------------------------Bulk Destroy Action----------------------------------------------*/
 router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SINGLE ENTITY UPDATING THE STATUS OF REMOVED FIELD
-    return UserModel.findById(req.params.id, function(err, entity){
+    return models.UserSchema.findById(req.params.id, function(err, entity){
         entity.removed = true;
         return entity.save(function(err){
             if(!err){
@@ -71,7 +78,7 @@ router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SIN
         });
     });
 }).delete(function(req, res, next){ // DELETE A SINGLE ENTITY REAL FROM DB -- DANGEROUS --
-    return UserModel.findById(req.params.id, function(err, entity){
+    return models.UserSchema.findById(req.params.id, function(err, entity){
         return entity.remove(function(err){
             if(!err){
                 console.log("Deleted from DB");
@@ -83,7 +90,7 @@ router.route('/nodes/destroy/:id').put(function(req, res, next){ // DELETE A SIN
     });
 });
 router.delete('/nodes/destroy/all', function (req, res, next){ // Bulk destroy all FROM DB -- VERY DANGER --
-    UserModel.remove(function (err) {
+    models.UserSchema.remove(function (err) {
         if (!err) {
             console.log("All has been deleted :(");
             return res.send('');

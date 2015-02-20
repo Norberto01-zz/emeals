@@ -14,17 +14,22 @@ module.controller('UserIndexCtrl', ['$scope', '$routeParams', 'appData', functio
 }]).controller('UserViewCtrl', ['$scope', '$routeParams', 'appData', function($scope, $routeParams, appData){// VIEW
   $scope.entityWrapp = appData.one('user/nodes', $routeParams.id).get().$object;
 }]).controller('UserCreateCtrl', [ '$scope', 'appData', '$routeParams', '$location', '$http', function($scope, appData, $routeParams, $location, $http){// CREATE
+
   $scope.setNode = function() {
     var entity = appData.all('user/nodes');
-    entity.post('nodeEntity', $scope.entityWrapp).then(function(){
-      $location.path('/user');
+    entity.post('nodeEntity', $scope.entityWrapp).then(function(res) {
+      $location.path('/');
+    }, function(err) {
+      $location.path('/');
     });
   };
+
+
 }]).controller('UserEditCtrl', ['$scope', 'appData', '$routeParams', '$location', function($scope, appData, $routeParams, $location){// EDIT
   $scope.entityWrapp = appData.one('user/nodes', $routeParams.id).get().$object;
   $scope.setData = function(data) {
     appData.one('user/nodes',$routeParams.id).put(data).then(function() {
-      $location.path('/user');
+      $location.path('/');
     });
   };
 }]);
