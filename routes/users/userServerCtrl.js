@@ -1,8 +1,12 @@
-var express = require('express');
-var router = express.Router();
-var models = require('../../models');
+var express = require('express'),
+    router  = express.Router(),
+    models  = require('../../models'),
+    moment  = require("moment"),
+    now     = moment(new Date()),
+    current = now.format("D MMM YYYY-HH:mm:ss");
 
-objectId = require('mongodb').ObjectID;
+objectId    = require('mongodb').ObjectID;
+
 
 
 var dataHandler = function (err, param, res){
@@ -16,47 +20,47 @@ var dataHandler = function (err, param, res){
 router.route('/nodes').get(function(req, res){ // LIST NODES
     return models.UserSchema.find(function(err, entity){dataHandler(err, entity, res)});
 }).post(function(req, res, next){ // CREATE NODES
-    //console.log(req.query);
-
-    var params = {name:req.param('name'), details:req.param('details'), status:req.param('status')};
-
     var entity = models.UserSchema.create({
-        parent:{name: req.param('name'), details: req.query.details, status: req.query.status},
-        last_name: req.param('last_name'),
-        username: req.param('username'),
-        password: req.param('password'),
-        email: req.param('email'),
-        phone: req.param('phone')
+        last_name  : req.param("last_name"),
+        username   : req.param("username"),
+        password   : req.param("password"),
+        email      : req.param("email"),
+        phone      : req.param("phone"),
+        entity_sch : [{
+            name   : req.param("name"),
+            details: req.param("details"),
+            status : req.param("status"),
+            created: current
+        }]
     });
-    entity.addParent(params);
-    //var examp =
-    //console.log(examp);
-    entity.save(function(err){
+    return entity.save(function(err){
         if(!err){
-            return console.log("Child Created");
+            console.log("Created!");
         } else {
-            console.log("Child Server ERROR");
-            return console.log(err);
+            console.log(err);
         }
+        return res.send(entity);
     });
-
-    return res.send(entity);
 });
 router.route('/nodes/:id').get(function(req, res, next){ // VIEW SPECIFIC NODES
     return models.UserSchema.findById(req.params.id, function(err, entity){dataHandler(err, entity, res)});
 }).put(function(req, res, next){ // UPDATE SPECIFIC NODES
     return models.UserSchema.findById(req.params.id, function(err, entity){
-        console.log(entity);
-        console.log(req.query);
-        entity.last_name = req.query.last_name;
-        entity.username = req.query.username;
-        entity.password = req.query.password;
-        entity.email = req.query.email;
-        entity.phone = req.query.phone;
-
+        entity.last_name  = req.query.last_name;
+        entity.username   = req.query.username;
+        entity.password   = req.query.password;
+        entity.email      = req.query.email;
+        entity.phone      = req.query.phone;
+        entity.entity_sch = [{
+            name   : req.query.name,
+            details: req.query.details,
+            status : req.query.status,
+            created: current
+        }];
         return entity.save(function(err){
             if(!err){
-                console.log("Update");
+                console.log(entity);
+                console.log("Updated");
             } else {
                 console.log(err);
             }

@@ -26,7 +26,6 @@ module.controller('EntityIndexCtrl', ['$scope', '$routeParams', 'appData', '$loc
         });
         ////console.log($scope.entityWrapp);
         entity.post('entitiesWrapp', $scope.entityWrapp).then(function(res) {
-
             $location.path('/entity');
         }, function(err) {
             $location.path('/entity');

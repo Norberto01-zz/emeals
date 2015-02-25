@@ -25,8 +25,12 @@ router.route('/nodes').get(function(req, res){ // LIST NODES
         name: req.query.name,
         details: req.query.details,
         status: true,
+        created: Date.now(),
         removed: false
     });
+
+    //entity.entity_sch[0].name = req.
+
     entity.save(function(err){
         if(!err){
             return console.log("Created NODE!!!");

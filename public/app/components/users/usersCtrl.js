@@ -17,6 +17,7 @@ module.controller('UserIndexCtrl', ['$scope', '$routeParams', 'appData', functio
 
   $scope.setNode = function() {
     var entity = appData.all('user/nodes');
+
     entity.post('nodeEntity', $scope.entityWrapp).then(function(res) {
       $location.path('/');
     }, function(err) {
@@ -25,8 +26,18 @@ module.controller('UserIndexCtrl', ['$scope', '$routeParams', 'appData', functio
   };
 
 
-}]).controller('UserEditCtrl', ['$scope', 'appData', '$routeParams', '$location', function($scope, appData, $routeParams, $location){// EDIT
-  $scope.entityWrapp = appData.one('user/nodes', $routeParams.id).get().$object;
+}]).controller('UserEditCtrl', ['$scope', 'appData', '$routeParams', '$location', function($scope, appData, $routeParams, $location){// UPDATE
+  var current = appData.one('user/nodes', $routeParams.id).get();
+
+  //$scope.entityWrapp = appData.one('user/nodes', $routeParams.id).get().$object;
+  $scope.entityWrapp = current.$object;
+  var entitysch = current.get("entity_sch");
+  entitysch.then(function(length) {
+    $scope.entityWrapp.name    = length[0].name;
+    $scope.entityWrapp.details = length[0].details;
+    $scope.entityWrapp.status  = length[0].status;
+  });
+
   $scope.setData = function(data) {
     appData.one('user/nodes',$routeParams.id).put(data).then(function() {
       $location.path('/');
